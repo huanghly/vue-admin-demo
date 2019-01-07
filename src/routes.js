@@ -3,6 +3,7 @@ import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
 import Table from './views/nav1/Table.vue'
+import Table2 from './views/nav1/Table2.vue'
 import Form from './views/nav1/Form.vue'
 import user from './views/nav1/user.vue'
 import Page4 from './views/nav2/Page4.vue'
@@ -15,7 +16,7 @@ let routes = [
         path: '/login',
         component: Login,
         name: '',
-        hidden: true
+        hidden: true,
     },
     {
         path: '/404',
@@ -27,13 +28,15 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '导航一',
+        name: '信息管理',
+        redirect: 'main',
         iconCls: 'el-icon-message',//图标样式class
         children: [
-            { path: '/main', component: Main, name: '主页', hidden: true },
-            { path: '/table', component: Table, name: 'Table' },
-            { path: '/form', component: Form, name: 'Form' },
-            { path: '/user', component: user, name: '列表' },
+            { path: '/main', component: Main, name: '主页', hidden: false},
+            { path: '/table', component: Table, name: '员工信息管理' },
+            { path: '/table2', component: Table2, name: '采购信息管理' },
+            { path: '/form', component: Form, name: '财务信息管理' },
+            { path: '/user', component: user, name: '出库信息' },
         ]
     },
     {
@@ -59,7 +62,7 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: 'Charts',
+        name: '销售量',
         iconCls: 'fa fa-bar-chart',
         children: [
             { path: '/echarts', component: echarts, name: 'echarts' }

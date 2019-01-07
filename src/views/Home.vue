@@ -9,9 +9,14 @@
 					<i class="fa fa-align-justify"></i>
 				</div>
 			</el-col>
-			<el-col :span="4" class="userinfo">
+			<el-col :span="4">
 				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner">
+						<img src="../assets/wyf1.jpeg"  style="{width: 60px;height:60px;}" />
+					 黄丽云
+					 
+					
+					</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的消息</el-dropdown-item>
 						<el-dropdown-item>设置</el-dropdown-item>
@@ -75,10 +80,13 @@
 	export default {
 		data() {
 			return {
-				sysName:'VUEADMIN',
+				sysName:'企业进销存管理系统',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
+				avatarUrl: '',	
+
+				
 				form: {
 					name: '',
 					region: '',
@@ -163,7 +171,10 @@
 						height: 40px;
 						border-radius: 20px;
 						margin: 10px 0px 10px 10px;
-						float: right;
+						background:url('../assets/wyf1.jpeg') no-repeat;
+						
+						
+					 
 					}
 				}
 			}
@@ -183,6 +194,11 @@
 				}
 				.txt {
 					color:#fff;
+				}
+			}
+			.avatar {
+				img {
+					
 				}
 			}
 			.logo-width{

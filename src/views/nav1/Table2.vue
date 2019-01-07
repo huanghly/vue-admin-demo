@@ -19,15 +19,21 @@
 		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column type="index" width="60" label="序号" >
+			<el-table-column type="index" label="序号" width="80">
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="name" label="采购人姓名" width="120" sortable>
 			</el-table-column>
 			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
 			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
+			<el-table-column prop="age" label="数量" width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="birth" label="入职时间" width="120" sortable>
+			<el-table-column prop="price" label="进价(￥)" width="100" sortable>
+			</el-table-column>
+			<el-table-column prop="birth" label="进货日期" width="120" sortable>
+			</el-table-column>
+			<el-table-column prop="productBar" label="商品型号" min-width="180" sortable>
+			</el-table-column>
+			<el-table-column prop="desc" label="商品描述" min-width="180" sortable>
 			</el-table-column>
 			<el-table-column prop="addr" label="地址" min-width="180" sortable>
 			</el-table-column>
@@ -42,14 +48,18 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
 			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-			</el-pagination>
+			<!-- <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+			</el-pagination> -->
+			  <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 		</el-col>
 
 		<!--编辑界面-->
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="姓名" prop="name">
+				<el-form-item label="序号" prop="name">
+					<el-input v-model="editForm.index" auto-complete="off" disabled></el-input>
+				</el-form-item>
+				<el-form-item label="采购人姓名" prop="name">
 					<el-input v-model="editForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="性别">
@@ -58,11 +68,20 @@
 						<el-radio class="radio" :label="0">女</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="年龄">
+				<el-form-item label="数量">
 					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
 				</el-form-item>
-				<el-form-item label="生日">
+				<el-form-item label="进价(￥)">
+					<el-input-number v-model="editForm.price" :min="0" :max="200"></el-input-number>
+				</el-form-item>
+				<el-form-item label="进货日期">
 					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+				</el-form-item>
+				<el-form-item label="商品型号">
+				   	<el-input v-model="editForm.productBar" ></el-input>
+				</el-form-item>
+				<el-form-item label="商品描述">
+					<el-input type="textarea" v-model="editForm.desc"></el-input>
 				</el-form-item>
 				<el-form-item label="地址">
 					<el-input type="textarea" v-model="editForm.addr"></el-input>
@@ -86,11 +105,20 @@
 						<el-radio class="radio" :label="0">女</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="年龄">
+				<el-form-item label="数量">
 					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
 				</el-form-item>
-				<el-form-item label="生日">
+				<el-form-item label="进价(￥)">
+					<el-input-number v-model="addForm.price" :min="0" :max="200"></el-input-number>
+				</el-form-item>
+				<el-form-item label="进货日期">
 					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
+				</el-form-item>
+				<el-form-item label="商品型号">
+				 	<el-input v-model="addForm.productBar" ></el-input>
+				</el-form-item>
+				<el-form-item label="商品描述">
+					<el-input type="textarea" v-model="addForm.desc"></el-input>
 				</el-form-item>
 				<el-form-item label="地址">
 					<el-input type="textarea" v-model="addForm.addr"></el-input>
@@ -105,11 +133,15 @@
 </template>
 
 <script>
-	import util from '../../common/js/util'
+	import util from '../../common/js/util';
+	import Pagination from '../../components/Pagination'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser, getUserList} from '../../api/api';
 
 	export default {
+		 components: {
+		  Pagination
+	     },
 		data() {
 			return {
 				filters: {
@@ -118,8 +150,20 @@
 				users: [],
 				total: 0,
 				page: 1,
+				price: 0.0,
+				desc: '',
 				listLoading: false,
 				sels: [],//列表选中列
+				listQuery: {
+					name: '',
+					page: 1,
+					limit: 20,
+					price: undefined,
+					desc: '',
+					price: 0.0,
+					total: 0,
+				 
+				},
 
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
@@ -134,6 +178,7 @@
 					name: '',
 					sex: -1,
 					age: 0,
+					price: 1.0,
 					birth: '',
 					addr: ''
 				},
@@ -150,6 +195,7 @@
 					name: '',
 					sex: -1,
 					age: 0,
+					price: 1.0,
 					birth: '',
 					addr: ''
 				}
@@ -180,6 +226,19 @@
 					//NProgress.done();
 				});
 			},
+
+			// 页面导航跳转
+			 getList() {
+				  this.listLoading = true;
+				  getUserList(this.listQuery).then(response => {
+					  this.users = response.data.items;
+					  this.total = response.data.total;
+					  this.listLoading = false;
+				  } )
+
+			 },
+
+			
 			//删除
 			handleDel: function (index, row) {
 				this.$confirm('确认删除该记录吗?', '提示', {

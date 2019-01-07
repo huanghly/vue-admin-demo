@@ -1,6 +1,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { LoginUsers, Users } from './data/user';
+import { getList} from './data/transaction';
 let _Users = Users;
 
 export default {
@@ -45,19 +46,35 @@ export default {
 
     //获取用户列表
     mock.onGet('/user/list').reply(config => {
-      let {name} = config.params;
+      let {name,page = 1,total = 20,limit = 20 } = config.params;
       let mockUsers = _Users.filter(user => {
         if (name && user.name.indexOf(name) == -1) return false;
         return true;
       });
+
+      const pageList = mockUsers.filter((item, index) => index < limit * page && index >= limit * (page - 1));
+
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve([200, {
-            users: mockUsers
+            users: mockUsers,
+            items: pageList
           }]);
         }, 1000);
       });
     });
+
+    // 获取商品信息
+    // mock.onGet('/main/saleInfo').reply(config => {
+    //   let { order_no } = config.params;
+    //   return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //      resolve([200, {
+  
+
+    //     }]))
+    //   })
+    // })
 
     //获取用户列表（分页）
     mock.onGet('/user/listpage').reply(config => {

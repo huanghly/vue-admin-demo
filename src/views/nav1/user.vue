@@ -4,7 +4,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+					<el-input v-model="filters.name" placeholder="输入搜索名字" ref="searchInfo"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUser">查询</el-button>
@@ -14,18 +14,36 @@
 
 		<!--列表-->
 		<template>
-			<el-table :data="users" highlight-current-row v-loading="loading" style="width: 100%;">
-				<el-table-column type="index" width="60">
+			<el-table :data="users" highlight-current-row v-loading="loading" v-show="showList">
+				<el-table-column type="index" width="60" label="序号">
 				</el-table-column>
 				<el-table-column prop="name" label="姓名" width="120" sortable>
 				</el-table-column>
 				<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
 				</el-table-column>
-				<el-table-column prop="age" label="年龄" width="100" sortable>
+				<el-table-column prop="age" label="销售数量" width="120" sortable>
 				</el-table-column>
-				<el-table-column prop="birth" label="生日" width="120" sortable>
+				<el-table-column prop="birth" label="日期" width="120" sortable>
 				</el-table-column>
-				<el-table-column prop="addr" label="地址" min-width="180" sortable>
+				<el-table-column prop="productBar" label="商品型号" min-width="180" sortable>
+				</el-table-column>
+				<el-table-column prop="addr" label="商品信息" min-width="180" sortable>
+				</el-table-column>
+			</el-table>
+			<el-table :data="productBars" highlight-current-row v-loading="loading" style="width: 100%;" v-show="showByFilter">
+				<el-table-column type="index" width="60" label="序号">
+				</el-table-column>
+				<el-table-column prop="name" label="姓名" width="120" sortable>
+				</el-table-column>
+				<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+				</el-table-column>
+				<el-table-column prop="age" label="销售数量" width="120" sortable>
+				</el-table-column>
+				<el-table-column prop="birth" label="日期" width="120" sortable>
+				</el-table-column>
+				<el-table-column prop="productBar" label="商品型号" min-width="180" sortable>
+				</el-table-column>
+				<el-table-column prop="addr" label="信息" min-width="180" sortable>
 				</el-table-column>
 			</el-table>
 		</template>
@@ -39,11 +57,14 @@
 		data() {
 			return {
 				filters: {
-					name: ''
+					productBar: ''
 				},
+				showList: true,
+				showByFilter: false,
 				loading: false,
 				users: [
-				]
+				],
+				productBars: []
 			}
 		},
 		methods: {
@@ -63,7 +84,26 @@
 					this.loading = false;
 					//NProgress.done();
 				});
-			}
+			},
+
+		/**	getProductBar: function () {
+				let para = {
+					productBar: this.filters.productBar
+				};
+				this.showList = false;
+				this.showByFilter = true;
+				this.loading = true;
+				//NProgress.start();
+				getUserList(para).then((res) => {
+					this.productBars = res.data.users.filter(item => {
+						this.$refs.searchInfo.value === item.productBar;
+					});
+					this.loading = false;
+					console.log(this.productBars);
+
+					//NProgress.done();
+				});
+			}  */
 		},
 		mounted() {
 			this.getUser();

@@ -1,10 +1,11 @@
 <template>
-  <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-    <h3 class="title">系统登录</h3>
-    <el-form-item prop="account">
+<div v-bind:style="{backgroundImage:'url('+ bg + ')'}" class="bg">
+<el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+    <h3 class="title">欢迎登录企业进销存管理系统</h3>
+    <el-form-item prop="account" label="账号"   label-width="100px">
       <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
-    <el-form-item prop="checkPass">
+    <el-form-item prop="checkPass" label="密码"   label-width="100px">
       <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
@@ -13,10 +14,13 @@
       <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
     </el-form-item>
   </el-form>
+</div>
+  
 </template>
 
 <script>
   import { requestLogin } from '../api/api';
+  import Bg from '../assets/bg.jpg';
   //import NProgress from 'nprogress'
   export default {
     data() {
@@ -26,6 +30,7 @@
           account: 'admin',
           checkPass: '123456'
         },
+        bg: Bg,
         rules2: {
           account: [
             { required: true, message: '请输入账号', trigger: 'blur' },
@@ -62,7 +67,7 @@
                 });
               } else {
                 sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/table' });
+                this.$router.push({ path: '/main' });
               }
             });
           } else {
@@ -77,13 +82,19 @@
 </script>
 
 <style lang="scss" scoped>
+ .bg {
+   width: 100%;
+   height: 600px;
+   padding-top: 100px;
+   background-size: 100% 100%;
+ }
   .login-container {
     /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
     -webkit-border-radius: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    margin: 180px auto;
+    margin: 100px auto;
     width: 350px;
     padding: 35px 35px 15px 35px;
     background: #fff;
