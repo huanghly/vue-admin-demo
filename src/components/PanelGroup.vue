@@ -6,7 +6,7 @@
           <img src="../assets/dollar.png" alt="" style="{width: 80px;height:80px;}">
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">New Visits</div>
+          <div class="card-panel-text">今日收入</div>
           <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num"/>
         </div>
       </div>
@@ -17,7 +17,7 @@
          <img src="../assets/car.png" alt="" style="{width: 80px;height:80px;}">
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Messages</div>
+          <div class="card-panel-text">进入采购量</div>
           <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num"/>
         </div>
       </div>
@@ -28,7 +28,7 @@
          <img src="../assets/users.png" alt="" style="{width: 80px;height:80px;}">
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Purchases</div>
+          <div class="card-panel-text">Purchases今日销售量</div>
           <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num"/>
         </div>
       </div>
@@ -39,7 +39,7 @@
          <img src="../assets/message.png" alt="" style="{width: 80px;height:80px;}">
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Shoppings</div>
+          <div class="card-panel-text">库存量信息</div>
           <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num"/>
         </div>
       </div>

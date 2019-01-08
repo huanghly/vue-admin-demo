@@ -17,6 +17,7 @@ for (let i = 0; i < 86; i++) {
     name: Mock.Random.cname(),
     productName: Mock.Random.cname(),
     addr: Mock.mock('@county(true)'),
+    IDcard:'@natural(18)',
     desc: Mock.mock('@ctitle'),
     productBar: '@natural(12)',
     'age|18-60': 1,

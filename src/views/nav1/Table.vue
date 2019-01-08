@@ -12,6 +12,9 @@
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
 				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="handleDownload">导出excel</el-button>
+				</el-form-item>
 			</el-form>
 		</el-col>
 
@@ -28,6 +31,8 @@
 			<el-table-column prop="age" label="年龄" width="100" sortable>
 			</el-table-column>
 			<el-table-column prop="birth" label="入职时间" width="120" sortable>
+			</el-table-column>
+			<el-table-column prop="IDcard" label="身份证" min-width="180" sortable>
 			</el-table-column>
 			<el-table-column prop="addr" label="地址" min-width="180" sortable>
 			</el-table-column>
@@ -61,8 +66,11 @@
 				<el-form-item label="年龄">
 					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
 				</el-form-item>
-				<el-form-item label="生日">
+				<el-form-item label="入职时间">
 					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+				</el-form-item>
+				<el-form-item label="身份证">
+					<el-input type="textarea" v-model="editForm.IDcard"></el-input>
 				</el-form-item>
 				<el-form-item label="地址">
 					<el-input type="textarea" v-model="editForm.addr"></el-input>
@@ -89,8 +97,11 @@
 				<el-form-item label="年龄">
 					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
 				</el-form-item>
-				<el-form-item label="生日">
+				<el-form-item label="入职时间">
 					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
+				</el-form-item>
+				<el-form-item label="身份证">
+					<el-input type="textarea" v-model="addForm.IDcard"></el-input>
 				</el-form-item>
 				<el-form-item label="地址">
 					<el-input type="textarea" v-model="addForm.addr"></el-input>
@@ -165,6 +176,26 @@
 				this.page = val;
 				this.getUsers();
 			},
+
+			// 导出 excel
+            handleDownload() {
+			this.downloadLoading = true
+			import('@/vendor/Export2Excel').then(excel => {
+				const tHeader = ['name', 'sex', 'age', 'birth', 'IDcard', 'addr']
+				const filterVal = ['name', 'sex', 'age', 'birth', 'IDcard', 'addr']
+				const data = this.formatJson(filterVal, this.users)
+				excel.export_json_to_excel({
+				header: tHeader,
+				data,
+				filename: 'table-list'
+				})
+				this.downloadLoading = false
+			})
+			},
+			 formatJson(filterVal, jsonData) {
+				return jsonData.map(v => filterVal.map(j => { v[j]	}))
+			},
+
 			//获取用户列表
 			getUsers() {
 				let para = {

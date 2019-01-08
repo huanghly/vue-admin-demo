@@ -5,7 +5,7 @@ import Main from './views/Main.vue'
 import Table from './views/nav1/Table.vue'
 import Table2 from './views/nav1/Table2.vue'
 import Form from './views/nav1/Form.vue'
-import user from './views/nav1/user.vue'
+import productOutput from './views/nav1/ProductOutput.vue'
 import Page4 from './views/nav2/Page4.vue'
 import Page5 from './views/nav2/Page5.vue'
 import Page6 from './views/nav3/Page6.vue'
@@ -33,20 +33,20 @@ let routes = [
         iconCls: 'el-icon-message',//图标样式class
         children: [
             { path: '/main', component: Main, name: '主页', hidden: false},
-            { path: '/table', component: Table, name: '员工信息管理' },
-            { path: '/table2', component: Table2, name: '采购信息管理' },
-            { path: '/form', component: Form, name: '财务信息管理' },
-            { path: '/user', component: user, name: '出库信息' },
+            { path: '/employeeManage', component: Table, name: '员工信息管理' },
+            { path: '/orderingManage', component: Table2, name: '采购信息管理' },
+            { path: '/financialManage', component: Form, name: '财务信息管理' },
+            { path: '/outputManage', component: productOutput, name: '出库信息' },
         ]
     },
     {
         path: '/',
         component: Home,
-        name: '导航二',
+        name: '上传表格',
         iconCls: 'fa fa-id-card-o',
         children: [
-            { path: '/page4', component: Page4, name: '页面4' },
-            { path: '/page5', component: Page5, name: '页面5' }
+            // { path: '/page4', component: Page4, name: '页面4' },
+            { path: '/page5', component: Page5, name: '上传excel表格' }
         ]
     },
     {
@@ -56,7 +56,7 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/page6', component: Page6, name: '导航三' }
+            { path: '/message', component: Page6, name: '我的消息' }
         ]
     },
     {
@@ -65,7 +65,7 @@ let routes = [
         name: '销售量',
         iconCls: 'fa fa-bar-chart',
         children: [
-            { path: '/echarts', component: echarts, name: 'echarts' }
+            { path: '/echarts', component: echarts, name: '数据可视化' }
         ]
     },
     {

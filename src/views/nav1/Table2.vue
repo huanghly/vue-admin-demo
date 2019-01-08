@@ -11,6 +11,10 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
+
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="handleDownload">导出excel</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -211,6 +215,26 @@
 				this.page = val;
 				this.getUsers();
 			},
+
+			// 导出 excel
+            handleDownload() {
+			this.downloadLoading = true
+			import('@/vendor/Export2Excel').then(excel => {
+				const tHeader = ['name', 'sex', 'age', 'birth', 'IDcard', 'addr']
+				const filterVal = ['name', 'sex', 'age', 'birth', 'IDcard', 'addr']
+				const data = this.formatJson(filterVal, this.users)
+				excel.export_json_to_excel({
+				header: tHeader,
+				data,
+				filename: 'ordering-list'
+				})
+				this.downloadLoading = false
+			})
+			},
+			 formatJson(filterVal, jsonData) {
+				return jsonData.map(v => filterVal.map(j => { v[j]	}))
+			}, 
+
 			//获取用户列表
 			getUsers() {
 				let para = {

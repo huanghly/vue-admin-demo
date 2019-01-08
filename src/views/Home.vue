@@ -18,8 +18,8 @@
 					
 					</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
+						<el-dropdown-item @click.native="handleMessage">消息</el-dropdown-item>
+						<el-dropdown-item @click.native="handleSetting">待办事情</el-dropdown-item>
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -125,6 +125,35 @@
 
 
 			},
+
+			// 设置
+
+			handleSetting: function() {
+				var _this = this;
+				this.$confirm('前往设置信息？', '提示', {
+				}).then(() => {
+					_this.$router.push('/main');
+				}).catch(() => {
+
+				})
+			},
+
+
+			handleMessage: function() {
+				alert("9");
+				var _this = this;
+				
+				this.$confirm('前往消息页？', '提示', {
+				}).then(() => {
+					_this.$router.push('/message');
+				}).catch(() => {
+
+				})
+			},
+
+			// 处理消息
+
+
 			//折叠导航栏
 			collapse:function(){
 				this.collapsed=!this.collapsed;
